@@ -1,4 +1,4 @@
-<li class="item col-lg-4 col-md-4 col-sm-6 col-xs-6" data-id="{{ $product->id }}">
+<li class="item col-lg-4 col-md-4 col-sm-6 col-xs-6">
     <div class="col-item">
         <div class="sale-label sale-top-right">Sale</div>
         <div class="images-container"> <a class="product-image" title="Sample Product" href="product_detail.html"> <img src="{{$product->image}}" class="img-responsive" alt="a" /> </a>
@@ -6,16 +6,16 @@
                 <div class="actions-inner">
                     <button type="button" title="Add to Cart" class="button btn-cart"><span>Add to Cart</span></button>
                     <ul class="add-to-links">
-                        <li><a title="Add to Wishlist" class="link-wishlist"><span>Add to Wishlist</span></a></li>
-                        <li><a title="Add to Compare" class="link-compare "><span>Add to Compare</span></a></li>
+                        <li><a data-href="{{ route('wishlist') }}" data-id="{{ $product->id }}" title="Add to Wishlist" class="link-wishlist @if (isset($wishlistProductsId)) {{ in_array($product->id, $wishlistProductsId) ? 'success' : '' }} @endif"><span>Add to Wishlist</span></a></li>
+                        <li><a href="compare.html" title="Add to Compare" class="link-compare "><span>Add to Compare</span></a></li>
                     </ul>
                 </div>
             </div>
-            <div class="qv-button-container"> <a class="qv-e-button btn-quickview-1"><span><span>Quick View</span></span></a> </div>
+            <div class="qv-button-container"> <a class="qv-e-button btn-quickview-1" href="quick_view.html"><span><span>Quick View</span></span></a> </div>
         </div>
         <div class="info">
             <div class="info-inner">
-                <div class="item-title"> <a title=" Sample Product"> {{ $product->name }} </a> </div>
+                <div class="item-title"> <a title=" Sample Product" href="product_detail.html"> {{ $product->name }} </a> </div>
                 <!--item-title-->
                 <div class="item-content">
                     <div class="ratings">

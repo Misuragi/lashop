@@ -7,7 +7,7 @@
     {!! Html::script('assets/plugins/sweetalert/sweetalert.min.js') !!}
     <script>
         $('.qv-button-container').click(function () {
-            $.get('/' + $(this).closest('.item').data('id'), function (data) {
+            $.get($('meta[name="base-url"]').attr('content')+'/home/' + $(this).closest('.item').data('id'), function (data) {
                 $('#fancybox-content').html(data.view);
                 $('#fancybox-overlay').fadeToggle(1500);
                 $('#fancybox-wrap').fadeToggle(800);

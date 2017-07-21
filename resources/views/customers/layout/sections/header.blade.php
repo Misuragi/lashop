@@ -30,7 +30,7 @@
                     <div class="toplinks">
                         <div class="links">
                             <div class="myaccount"><a title="My Account" href="login.html"><span class="hidden-xs">My Account</span></a></div>
-                            <div class="wishlist"><a title="My Wishlist" href="wishlist.html"><span class="hidden-xs">Wishlist</span></a></div>
+                            <div class="wishlist"><a title="My Wishlist" href="{{ route('wishlists.index') }}"><span class="hidden-xs">Wishlist</span></a></div>
                             <div class="check"><a title="Checkout" href="checkout.html"><span class="hidden-xs">Checkout</span></a></div>
                             <div class="phone hidden-xs">1 800 123 1234</div>
                         </div>

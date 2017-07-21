@@ -7,7 +7,7 @@
                 <div class="actions-inner">
                     <button type="button" title="Add to Cart" class="button btn-cart"><span>Add to Cart</span></button>
                     <ul class="add-to-links">
-                        <li><a title="Add to Wishlist" class="link-wishlist"><span>Add to Wishlist</span></a></li>
+                        <li><a data-href="{{ route('wishlist') }}" data-id="{{ $product->id }}" title="Add to Wishlist" class="link-wishlist @if (isset($wishlistProductsId)) {{ in_array($product->id, $wishlistProductsId) ? 'success' : '' }} @endif"><span>Add to Wishlist</span></a></li>
                         <li><a title="Add to Compare" class="link-compare "><span>Add to Compare</span></a></li>
                     </ul>
                 </div>

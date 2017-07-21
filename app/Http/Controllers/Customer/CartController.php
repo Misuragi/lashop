@@ -105,4 +105,18 @@ class CartController extends Controller
     {
         Cart::destroy();
     }
+
+    public function addAll(Request $request)
+    {
+        foreach ($request->ids as $id) {
+            $product = Product::find($id);
+            $itemCart = Cart::add($id, $product->name, $product->price, $product->image);
+        }
+        
+        return response()->json([
+            'cartContent' => view('customers.carts.components.itemCart', ['cartContent' => Cart::content()])->render(),
+            'total' => Cart::count(),
+            'subTotal' => number_format(Cart::subTotal()),
+        ]);
+    }
 }
