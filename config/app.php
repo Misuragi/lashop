@@ -182,6 +182,7 @@ return [
         App\Providers\AdminAuthServiceProvider::class,
 
         App\Providers\SettingServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
 
     ],
 

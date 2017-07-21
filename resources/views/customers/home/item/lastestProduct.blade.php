@@ -11,7 +11,7 @@
             <div class="actions">
                 <div class="actions-inner">
                     <ul class="add-to-links">
-                        <li><a href="wishlist.html" title="Add to Wishlist" class="link-wishlist"><span>Add to Wishlist</span></a></li>
+                        <li><a data-href="{{ route('wishlist') }}" data-id="{{ $product->id }}" title="Add to Wishlist" class="link-wishlist @if (isset($wishlistProductsId)) {{ in_array($product->id, $wishlistProductsId) ? 'success' : '' }} @endif"><span>Add to Wishlist</span></a></li>
                         <li><a href="compare.html" title="Add to Compare" class="link-compare "><span>Add to Compare</span></a></li>
                     </ul>
                 </div>

@@ -181,8 +181,6 @@
 @push('scripts')
     <script type="text/javascript">
         $('#see-more-comment').click(function(event) {
-            // $('#comment-load a').css('color', '#dfecf6');
-            // $('#loading2').css('top', parseInt($('#loading2').css('top')) + 20 +'%');
             $('#loading2').show();
             console.log($(this).attr('data-route'));
             $.get($(this).attr('data-route'), {'product_id' : $(this).attr('data-product-id'), page : $(this).attr('data-currentpage')})
@@ -203,13 +201,8 @@
         });
 
         $('#button-submit-comment').click(function(event) {
-        //  console.log("aa");
             var form = $(this).closest('#form-comment');
             $.post(form.attr('action'), form.serialize(), function (data) {
-                // addNewEntryComment(data);
-                console.log(data);
-                
-                // $('#comment-load').prependTo(data);
                 var controlForm = $('#comment-load:first'),
                     newEntry = $(data).prependTo(controlForm);
 
@@ -219,10 +212,7 @@
 
         Echo.private('comments.' + $('#comment-product').val())
             .listen('CommentPusherEvent', (data) => {
-                // console.log(data.comment.id);
                 var content_commnet_update = $('#comment-content-' + data.comment.id);
-
-                // console.log(content_commnet_update);
                 if (content_commnet_update.length) {
                     console.log(data.comment.content);
                     if(data.comment.content == null) {
@@ -233,7 +223,6 @@
                 } else {
                     addNewEntryComment(data.comment);
                 }
-                // $(newEntry.find('.edit-comment')).on( "click", editComment );
         });
 
         function addNewEntryComment(data) {
@@ -270,12 +259,10 @@
         });
 
         function editComment(currentThis) {
-            // currentThis = $(this);
             var edit_route = currentThis.data('edit');
             var parent_edit_comment = currentThis.parentsUntil('.entry-comment');
             var edit_comment = parent_edit_comment.find('div.comment-textarea');
             var value_comment = edit_comment.text();
-            // console.log(edit_comment);
             html = '<form id="form-edit-comment" method="POST" action="' + edit_route + '">'
                     + '<ul>'
                     + '<li>'                       
@@ -315,7 +302,6 @@
         }
 
         $('#comment-load').on('click', '.delete-comment', function() {
-            // console.log('a');
             deleteComment($(this));
         });
 

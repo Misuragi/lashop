@@ -28,8 +28,22 @@
             'csrfToken' => csrf_token(),
             ]); ?>
         </script>
+        <style type="text/css">
+            .success {
+                color: #ffcc00 !important;
+            }
+        </style>
 </head>
 <body id="body">
+@if(Session::has('notLogedIn'))
+    <script type="text/javascript">
+        swal(
+            'Oops...',
+            'You are not loged in!',
+            'error'
+        )
+    </script>
+@endif
 <div style="background-color: rgb(119, 119, 119); opacity: 0.7; cursor: pointer; height: 100%; display: none; padding: 0; position: fixed;" id="fancybox-overlay"></div>
 <div style="width: 1190px; height: auto; top: 20%; left: 25%; display: none; position: fixed;" id="fancybox-wrap">
     <div id="fancybox-outer">
@@ -124,7 +138,36 @@
             }
         });
     </script>
-    
+    <!-- wishlists -->
+    <script type="text/javascript">
+        $(document).on('click', '.link-wishlist', function () {
+            var id = $(this).data('id');
+            var url = $(this).data('href');
+            wishlist = $(this);
+            $.ajax({
+                method : 'POST',
+                url : url,
+                data : {'id': id},
+                success : function (data) {
+                    switch(data.message) {
+                        case 'deleted':
+                            wishlist.removeClass('success');
+                            break;
+                        case 'created':
+                            wishlist.addClass('success');
+                            break;
+                        case 'notLogedIn':
+                            swal(
+                                'Oops...',
+                                'You are not loged in!',
+                                'error'
+                            )
+                            break;
+                    }
+                },
+            });
+        });
+    </script>
     {!! Html::script('assets/js/app.js') !!}
     @stack('scripts')
 

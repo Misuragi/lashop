@@ -11,9 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('customers.layout.master');
-})->name('home');
 
 Route::group(['middleware' => 'web'], function () {
     Route::group(['namespace' => 'Admin', 'prefix' => 'admin' ], function () {
@@ -56,12 +53,16 @@ Route::group(['namespace' => 'Auth', 'prefix' => '', 'middleware' => 'guest'], f
 });
 
 Route::group(['namespace' => 'Customer', 'prefix' => '' ], function () {
+    //wishlist
+    Route::post('wishlist', 'WishlistController@wishlist')->name('wishlist');
+    Route::get('wishlists', 'WishlistController@index')->name('wishlists.index')->middleware('checklogin');
+    Route::post('/wishtlist/{id}', 'WishlistController@destroy')->name('wishlist.destroy');
     //search
     Route::get('catalog', 'ProductSearchController@search')->name('search.catalog');
     Route::get('/home/search/list', 'ProductSearchController@searchList')->name('search.list');
 
     Route::resource('comments', 'CommentsController');
-    Route::get('/{id}', 'HomeController@show');
+    Route::get('/home/{id}', 'HomeController@show');
     Route::get('/', 'HomeController@index')->name('home');
     //
     Route::get('/category/{id}', 'CategoryController@show')->name('category.show');
@@ -69,5 +70,6 @@ Route::group(['namespace' => 'Customer', 'prefix' => '' ], function () {
     Route::resource('carts', 'CartController', ['except' => ['destroy', 'show']]);
     Route::post('carts/destroy', 'CartController@destroy');
     Route::post('carts/update-cart', 'CartController@updateCart');
+    Route::post('carts/add-all', 'CartController@addAll')->name('carts.addAll');
     Route::resource('products', 'ProductsController');
 });

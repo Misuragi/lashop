@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
 
         'admin.guest' => Middleware\AdminRedirectIfAuthenticated::class,
         'admin.auth' => Middleware\AdminRedirectIfNotAuthenticated::class,
+        'checklogin' => Middleware\CheckLogIn::class,
     ];
 }
