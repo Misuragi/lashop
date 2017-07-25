@@ -39,7 +39,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/product/saveProperties', 'ProductController@saveProperties')->name('product.saveProperties');
         Route::post('/product/search', 'ProductController@search')->name('product.search');
         Route::resource('/product', 'ProductController');
-        Route::resource('/admins', 'AdminsController');
+        //Route::resource('/admins', 'AdminsController');
         //Route::resource('/productproperty', 'ProductPropertyController');
     });
 });
@@ -66,10 +66,15 @@ Route::group(['namespace' => 'Customer', 'prefix' => '' ], function () {
     Route::get('/', 'HomeController@index')->name('home');
     //
     Route::get('/category/{id}', 'CategoryController@show')->name('category.show');
-    Route::resource('billing', 'BillingController', ['only' => ['store']]);
+    //Route::resource('billing', 'BillingController', ['only' => ['store']]);
     Route::resource('carts', 'CartController', ['except' => ['destroy', 'show']]);
     Route::post('carts/destroy', 'CartController@destroy');
     Route::post('carts/update-cart', 'CartController@updateCart');
     Route::post('carts/add-all', 'CartController@addAll')->name('carts.addAll');
     Route::resource('products', 'ProductsController');
+    //rating
+    Route::resource('rating', 'RatingController');
+    Route::get('/rating/edit/form', function() {
+    return View::make('customers.products.sections.edit-rating-form');
+});
 });

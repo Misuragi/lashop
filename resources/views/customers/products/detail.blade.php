@@ -2,6 +2,19 @@
 @section('title')
 <title>Home</title>
 @endsection
+@push('styles')
+    {!! Html::style('assets/plugins/jquery-bar-rating/themes/fontawesome-stars.css') !!}
+
+    <style type="text/css">
+        .box-reviews1 .br-theme-fontawesome-stars .br-widget a {
+            font: 30px/1 FontAwesome;
+            margin: 10px 10px !important;
+        }
+        .box-reviews1 .br-wrapper{
+            padding :20px 0px;
+        }
+    </style>
+@endpush
 @section('content')
 <section class="main-container col1-layout">
     <div class="main container">
@@ -76,6 +89,7 @@
                             <ul id="product-detail-tab" class="nav nav-tabs product-tabs">
                                 <li class="active"> <a href="#product_tabs_description" data-toggle="tab"> Product Description </a> </li>
                                 <li> <a href="#product_tabs_custom" data-toggle="tab">Product detail</a> </li>
+                                <li><a href="#product_review" data-toggle="tab">Review</a></li>
                                 <li><a href="#product_tabs_tags" data-toggle="tab">Comment</a></li>
                             </ul>
                             <div id="productTabContent" class="tab-content">
@@ -113,7 +127,58 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- product-review -->
                                 @if(Auth::check())
+                                <div class="tab-pane fade" id="product_review">
+                                    <div class="box-collateral box-reviews" id="customer-reviews">
+                                        <div class="box-reviews1">
+                                            <div class="form-add">
+                                                <form id="review-form" method="post" action="{{ route('rating.store') }}">
+                                                    <input type="hidden" value="{{ $product->id }}" id="product_id" name="product_id">
+                                                    <div class="rows">
+                                                        <label class="required" for="summary_field">How do you rate this product?<em>*</em></label>
+                                                        <select class="ratting-bar" name="score">
+                                                            <option value="1" data-html="bad">1</option>
+                                                            <option value="2" data-html="nomal">2</option>
+                                                            <option value="3" data-html="good">3</option>
+                                                            <option value="4" data-html="better">4</option>
+                                                            <option value="5" data-html="best">5</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="review2">
+                                                        <ul>
+                                                            <li>
+                                                                <label class="required" for="summary_field">Summary<em>*</em></label>
+                                                                <div class="input-box">
+                                                                <input type="text" class="input-text required-entry" id="summary_field" name="summary">
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <label class="required label-wide" for="review_field">Review<em>*</em></label>
+                                                                <div class="input-box">
+                                                                    <textarea class="required-entry" rows="3" cols="5" id="review_field" name="review"></textarea>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="buttons-set">
+                                                        <button class="button" id = "btn-review-submit" title="Submit Review" type="button"><span>Submit Review</span></button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="box-reviews2">
+                                        <h3>Customer Reviews</h3>
+                                        <div class="box visible">
+                                            @include('customers.products.sections.review', [ 'ratings' => $ratings])
+                                        </div>
+                                        
+                                        <div style="text-align: center;" class="col-md-12 col-md-offset-3"> <a data-currentpage="2" data-product-id="{{ $product->id}}" data-route="{{ route('rating.index') }}" href="javascript:void(0)" class="button view-all" id="see-more-ratings"><span><span>See more</span></span></a> </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                                <!-- comment -->
                                 <div class="tab-pane fade" id="product_tabs_tags">
                                     <div class="box-collateral box-reviews" id="customer-reviews">
                                         <div class="box-reviews2">
@@ -139,11 +204,12 @@
                                                 @include('customers.products.sections.comment', ['comment' => $comment])
                                             @endforeach
                                             </ul>
-                                            <img id="loading2" style="position: absolute; display: none; left: 40%; z-index: 100000;" src="{{ asset('assets/images/30.gif') }}" />
-                                            <div style="text-align: center;" class="actions"> <a data-currentpage="2" data-product-id={{ $product->id}} data-route="{{ route('comments.index') }}" href="javascript:void(0)" class="button view-all" id="see-more-comment"><span><span>See more</span></span></a> </div>
+                                            
+                                            <div style="text-align: center;" class="actions"> <a data-currentpage="2" data-product-id="{{ $product->id}}" data-route="{{ route('comments.index') }}" href="javascript:void(0)" class="button view-all" id="see-more-comment"><span><span>See more</span></span></a> </div>
                                         </div>
                                     </div>
                                 </div>
+                                <img class="loading" style="position: absolute; display: none; left: 40%; z-index: 100000;" src="{{ asset('assets/images/30.gif') }}" />
                                 @endif
                                 <div class="col-sm-12">
                                     <div class="box-additional">
@@ -179,27 +245,119 @@
         </section>
         @endsection
 @push('scripts')
+{!! Html::script('assets/plugins/jquery-bar-rating/jquery.barrating.min.js') !!}
     <script type="text/javascript">
-        $('#see-more-comment').click(function(event) {
-            $('#loading2').show();
-            console.log($(this).attr('data-route'));
-            $.get($(this).attr('data-route'), {'product_id' : $(this).attr('data-product-id'), page : $(this).attr('data-currentpage')})
-                .done(function(e) {
-                    console.log(e);
-                    $('#loading2').hide();
-                    $('#comment-load').append(e);
-
-                    var currentpage = parseInt($('#see-more-comment').attr('data-currentpage')) + 1;
-                    $('#see-more-comment').attr('data-currentpage', currentpage);
-                    if(e === "empty") {
-                        $('#see-more-comment').hide();
-                    } else {
-                        $('#comment-load').append(e);
-                    }
-                    // console.log(e);
+        //show rating bar jquery
+        $(function() {
+            $('.ratting-bar').barrating({
+                theme: 'fontawesome-stars'
             });
         });
 
+        //submit form review
+        $(document).on('click', '#btn-review-submit', function () {
+            var form = $(this).closest('#review-form');
+
+            $.post(form.attr('action'), form.serialize(), function (data) {
+                $('.review-result').prepend(data);
+                form[0].reset();
+                $('.ratting-bar').barrating('clear');
+            });
+        });
+
+        Echo.private('ratings.' + $('#product_id').val())
+            .listen('RatingPusherEvent', (data) => {
+                $('.review-result').prepend(data.renderView);
+            });
+
+        //see more ratings
+        $('#see-more-ratings').click(function(event) {
+           seeMore($(this), $('.review-result'));
+        });
+
+        //see more comment 
+        $('#see-more-comment').click(function(event) {
+            seeMore($(this), $('#comment-load'));
+        });
+
+        function seeMore(object, result) {
+            $('.loading').show();
+            $.get(object.attr('data-route'), { 'product_id' : object.attr('data-product-id'), page : object.attr('data-currentpage') })
+                .done(function(e) {
+                    $('.loading').hide();
+                    var currentpage = parseInt(object.attr('data-currentpage')) + 1;
+                    object.attr('data-currentpage', currentpage);
+                    if(e === "empty") {
+                        object.hide();
+                    } else {
+                        result.append(e);
+                    }
+            });
+        }
+
+        //delete review
+        $(document).on('click', '.delete-rating', function () {
+            url = $(this).data('delete');
+            item = $(this);
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        success: function ( data ) {
+                            if (data == 1) {
+                                swal(
+                                    'Deleted !',
+                                    'Success',
+                                    'success'
+                                )
+                                item.parents('li').remove();
+                            }
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your imaginary file is safe :)", "error");
+                }
+            });
+        });
+
+        //edit review
+        $(document).on('click', '.edit-rating', function() {
+            var route = $(this).data('edit');
+            var object = $(this);
+            $.ajax({
+                type: 'GET',
+                url : route,  
+                success : function (data) {
+                    object.parents('li').find('.review-txt').html(data);
+                }
+            });  
+        });
+        $(document).on('click', '#button-update-rating', function(e) {
+                var form = $(this).closest('#form-edit-rating');
+                var object = $(this);
+                $.ajax({
+                    type: 'PUT',
+                    url : form.attr('action'), 
+                    data: form.serialize(), 
+                    success : function (data) {
+                        object.parents('li').find('.review-txt').html(data.ratingUpdate.review);
+                    }    
+                });
+            });
+    </script>
+    <script type="text/javascript">
         $('#button-submit-comment').click(function(event) {
             var form = $(this).closest('#form-comment');
             $.post(form.attr('action'), form.serialize(), function (data) {
