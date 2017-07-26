@@ -25,6 +25,12 @@ Broadcast::channel('comments.{productId}', function ($user, $productId) {
     // return true;
 });
 
+Broadcast::channel('ratings.{productId}', function ($rating, $productId) {
+    return [
+        'rating' => $rating
+    ];
+});
+
 // Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 // 	if (true) { // Replace with real authorization
 //         return (int) $user->id === (int) $id;

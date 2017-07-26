@@ -87,4 +87,9 @@ class Product extends BaseModel
     {
         return url('assets/images/products-images') . '/' . $image;
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

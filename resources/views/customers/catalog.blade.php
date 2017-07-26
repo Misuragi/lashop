@@ -116,7 +116,6 @@
                             </ul>
                         </div>
                     </div>
-                    @include('customers.category_product.component.aside_brand')
                 </aside>
             </div>
         </div>
